@@ -1,9 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Search, ArrowLeft } from "lucide-react";
 import { Footer } from "@/components/footer";
+
+const ChicagoMap = dynamic(
+  () => import("@/components/ui/chicago-map").then((m) => m.ChicagoMap),
+  { ssr: false, loading: () => <div className="h-64 rounded-md bg-white/[0.03] border border-white/8 animate-pulse" /> }
+);
 
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
@@ -19,6 +25,8 @@ interface Business {
   result_trend?: number;
   address?: string;
   zip_code?: string;
+  latitude?: number;
+  longitude?: number;
 }
 
 function ScoreGauge({ score }: { score: number }) {
@@ -96,6 +104,7 @@ export default function SearchPage() {
           </Link>
           <span className="text-white/10 px-2">|</span>
           <span className="font-mono text-xs text-white/30 uppercase tracking-widest">Business Search</span>
+          <Link href="/about" className="font-mono text-xs uppercase tracking-widest text-white/30 hover:text-red-400 transition-colors ml-4">About</Link>
         </div>
         <Link href="/" className="flex items-center gap-2.5">
           <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.8)]" />
@@ -237,6 +246,31 @@ export default function SearchPage() {
             </div>
           </div>
         )}
+
+        {/* Chicago Map — always visible once search is done, or as default city view */}
+        <div className="mt-8">
+          <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/20 border-b border-white/5 pb-2 mb-4 flex items-center gap-3">
+            <span>✶ Chicago Map · {results.filter(b => b.latitude).length > 0 ? `${results.filter(b => b.latitude).length} locations pinned` : "City view"}</span>
+          </div>
+          <ChicagoMap
+            height="420px"
+            focusMarker={
+              selected?.latitude && selected?.longitude
+                ? { lat: selected.latitude, lng: selected.longitude }
+                : null
+            }
+            markers={results
+              .filter((b) => b.latitude && b.longitude)
+              .map((b) => ({
+                lat: b.latitude!,
+                lng: b.longitude!,
+                name: b.dba_name,
+                score: b.risk_score,
+                bucket: b.risk_bucket,
+                address: b.address,
+              }))}
+          />
+        </div>
       </div>
       <Footer />
     </div>

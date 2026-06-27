@@ -132,6 +132,7 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-6">
           <Link href="/search" className="font-mono text-xs uppercase tracking-widest text-white/30 hover:text-red-400 transition-colors">Search</Link>
+          <Link href="/about" className="font-mono text-xs uppercase tracking-widest text-white/30 hover:text-red-400 transition-colors">About</Link>
           <span className="font-mono text-xs text-white/20">{time}</span>
         </div>
       </nav>

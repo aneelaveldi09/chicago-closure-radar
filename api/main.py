@@ -68,6 +68,10 @@ class BusinessRisk(BaseModel):
     all_time_violations_per_insp: Optional[float]
     consecutive_fails: Optional[float]
     result_trend: Optional[float]
+    address: Optional[str]
+    zip_code: Optional[str]
+    latitude: Optional[float]
+    longitude: Optional[float]
 
 
 class SearchRequest(BaseModel):
@@ -134,7 +138,7 @@ def list_businesses(
 
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
     opt  = ["days_since_last_inspection", "all_time_fail_rate",
-            "all_time_violations_per_insp", "address", "zip_code"]
+            "all_time_violations_per_insp", "address", "zip_code", "latitude", "longitude"]
     cols += [c for c in opt if c in df.columns]
 
     return {
@@ -168,7 +172,7 @@ def search_businesses(body: SearchRequest):
     results = df[mask].nlargest(body.limit, "risk_score")
 
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
-    opt  = ["days_since_last_inspection", "all_time_fail_rate", "address", "zip_code"]
+    opt  = ["days_since_last_inspection", "all_time_fail_rate", "address", "zip_code", "latitude", "longitude"]
     cols += [c for c in opt if c in df.columns]
     return results[cols].fillna("").to_dict("records")
 
@@ -179,7 +183,7 @@ def top_risk(n: int = Query(20, ge=1, le=100)):
     top = df.nlargest(n, "risk_score")
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
     opt  = ["days_since_last_inspection", "all_time_fail_rate",
-            "all_time_violations_per_insp", "address", "zip_code"]
+            "all_time_violations_per_insp", "address", "zip_code", "latitude", "longitude"]
     cols += [c for c in opt if c in df.columns]
     return top[cols].fillna("").to_dict("records")
 

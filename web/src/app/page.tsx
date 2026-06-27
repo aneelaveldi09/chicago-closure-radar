@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Terminal, TypingAnimation, AnimatedSpan } from "@/components/ui/terminal";
 import { Backlight } from "@/components/ui/backlight";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 
 const StarshipShader = dynamic(
   () => import("@/components/ui/starship-shader").then((m) => m.StarshipShader),
@@ -41,9 +42,9 @@ export default function Home() {
         <StarshipShader />
       </div>
 
-      {/* ── Dark overlay gradient ── */}
-      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-transparent to-black/90" />
-      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 via-transparent to-black/60" />
+      {/* Dark overlay gradients — pointer-events-none so they never block clicks */}
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-black/40 via-transparent to-black/90 pointer-events-none" />
+      <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 via-transparent to-black/60 pointer-events-none" />
 
       {/* ── Nav ── */}
       <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-8 h-14 border-b border-white/5 backdrop-blur-sm">
@@ -59,15 +60,16 @@ export default function Home() {
         <div className="flex items-center gap-6">
           <Link href="/dashboard" className="font-mono text-xs uppercase tracking-widest text-white/40 hover:text-red-400 transition-colors">Dashboard</Link>
           <Link href="/search" className="font-mono text-xs uppercase tracking-widest text-white/40 hover:text-red-400 transition-colors">Search</Link>
+          <Link href="/about" className="font-mono text-xs uppercase tracking-widest text-white/40 hover:text-red-400 transition-colors">About</Link>
           <span className="font-mono text-xs text-white/20">{time}</span>
         </div>
       </nav>
 
       {/* Chicago flag top blue stripe */}
-      <div className="absolute top-14 left-0 right-0 z-20 h-[1px] bg-[#1F6CB0]/20" />
+      <div className="absolute top-14 left-0 right-0 z-20 h-[1px] bg-[#1F6CB0]/20 pointer-events-none" />
 
-      {/* ── Hero content ── */}
-      <div className="relative z-20 flex min-h-screen items-center">
+      {/* Hero content — z-40 ensures it's above all decorative layers */}
+      <div className="relative z-40 flex min-h-screen items-center">
         <div className="max-w-7xl mx-auto px-8 w-full pt-14">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
@@ -119,11 +121,15 @@ export default function Home() {
               </div>
 
               <div className="flex items-center gap-4">
-                <Link
-                  href="/dashboard"
-                  className="inline-flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded transition-colors"
-                >
-                  Open Radar →
+                <Link href="/dashboard">
+                  <ShimmerButton
+                    shimmerColor="rgba(255,255,255,0.4)"
+                    background="rgba(232,41,58,1)"
+                    borderRadius="6px"
+                    className="font-mono text-xs uppercase tracking-widest"
+                  >
+                    Open Radar →
+                  </ShimmerButton>
                 </Link>
                 <a
                   href="https://github.com/aneelaveldi09/chicago-closure-radar"
@@ -192,13 +198,13 @@ export default function Home() {
       </div>
 
       {/* Chicago flag bottom blue stripe */}
-      <div className="absolute bottom-12 left-0 right-0 z-20 h-[1px] bg-[#1F6CB0]/15" />
+      <div className="absolute bottom-12 left-0 right-0 z-20 h-[1px] bg-[#1F6CB0]/15 pointer-events-none" />
 
       {/* Bottom gradient fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 z-20 bg-gradient-to-t from-black to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 z-20 bg-gradient-to-t from-black to-transparent pointer-events-none" />
 
       {/* Copyright + Chicago stars */}
-      <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center gap-1.5">
+      <div className="absolute bottom-4 left-0 right-0 z-30 flex flex-col items-center gap-1.5 pointer-events-none">
         <div className="flex items-center gap-3">
           {["✶","✶","✶","✶"].map((s, i) => (
             <span key={i} className="text-[#e8293a] text-xs" style={{ textShadow: "0 0 6px rgba(232,41,58,0.5)" }}>{s}</span>
