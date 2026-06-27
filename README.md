@@ -38,7 +38,7 @@
 
 ## The idea
 
-<img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1200&q=80&fit=crop" width="100%" alt="Chicago street with storefronts" />
+<img src="https://images.unsplash.com/photo-1564756631354-009c12675629?w=1200&q=85&fit=crop" width="100%" alt="Chicago CTA elevated train in the Loop" />
 
 <br />
 
