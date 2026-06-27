@@ -1,0 +1,134 @@
+/* ── Chicago Closure Radar — Custom Dark Theme ──────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;600;700&display=swap');
+
+/* Base */
+html, body, [class*="css"] {
+    font-family: 'IBM Plex Sans', sans-serif !important;
+    background-color: #080c12 !important;
+    color: #c8d6e5 !important;
+}
+
+/* Main container */
+.main .block-container {
+    padding-top: 1.2rem;
+    padding-bottom: 2rem;
+    max-width: 1400px;
+}
+
+/* Sidebar */
+[data-testid="stSidebar"] {
+    background-color: #0d1117 !important;
+    border-right: 1px solid #1e2a3a !important;
+}
+[data-testid="stSidebar"] * { color: #8fa8c4 !important; }
+[data-testid="stSidebar"] .stMarkdown h2 {
+    color: #ff3b3b !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.15em !important;
+    text-transform: uppercase !important;
+    border-bottom: 1px solid #1e2a3a;
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+}
+
+/* Headers */
+h1 { font-family: 'IBM Plex Mono', monospace !important;
+     color: #ffffff !important; font-size: 1.7rem !important; letter-spacing: -0.02em; }
+h2 { font-family: 'IBM Plex Mono', monospace !important;
+     color: #ff3b3b !important; font-size: 0.7rem !important;
+     text-transform: uppercase; letter-spacing: 0.15em; }
+h3 { color: #e8f0fe !important; font-size: 1rem !important; font-weight: 600; }
+
+/* Metric cards */
+[data-testid="metric-container"] {
+    background: #0d1117;
+    border: 1px solid #1e2a3a;
+    border-radius: 6px;
+    padding: 16px 20px !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricLabel"] {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.65rem !important;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #5d7a96 !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricValue"] {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 2rem !important;
+    color: #ffffff !important;
+}
+[data-testid="metric-container"] [data-testid="stMetricDelta"] {
+    font-size: 0.75rem !important;
+}
+
+/* Inputs */
+.stTextInput input, .stSelectbox select {
+    background: #0d1117 !important;
+    border: 1px solid #1e2a3a !important;
+    color: #c8d6e5 !important;
+    border-radius: 4px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+}
+.stTextInput input:focus { border-color: #ff3b3b !important; }
+
+/* Buttons */
+.stButton > button {
+    background: #ff3b3b !important;
+    color: #ffffff !important;
+    border: none !important;
+    border-radius: 4px !important;
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.1em !important;
+    text-transform: uppercase !important;
+    padding: 8px 20px !important;
+    transition: all 0.15s ease !important;
+}
+.stButton > button:hover { background: #cc2020 !important; }
+
+/* Dataframe / table */
+[data-testid="stDataFrame"] { border: 1px solid #1e2a3a; border-radius: 6px; }
+.dataframe { background: #0d1117 !important; }
+thead tr th { background: #111827 !important; color: #5d7a96 !important;
+              font-family: 'IBM Plex Mono', monospace !important; font-size: 0.65rem !important;
+              text-transform: uppercase; letter-spacing: 0.08em; }
+tbody tr td { color: #c8d6e5 !important; font-family: 'IBM Plex Mono', monospace !important;
+              font-size: 0.8rem !important; }
+tbody tr:hover td { background: #111827 !important; }
+
+/* Dividers */
+hr { border-color: #1e2a3a !important; }
+
+/* Tabs */
+[data-testid="stTabs"] [data-baseweb="tab-list"] {
+    background: transparent !important;
+    border-bottom: 1px solid #1e2a3a !important;
+    gap: 0 !important;
+}
+[data-testid="stTabs"] [data-baseweb="tab"] {
+    font-family: 'IBM Plex Mono', monospace !important;
+    font-size: 0.7rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.1em !important;
+    color: #5d7a96 !important;
+    background: transparent !important;
+    padding: 10px 20px !important;
+    border-bottom: 2px solid transparent !important;
+}
+[data-testid="stTabs"] [aria-selected="true"] {
+    color: #ff3b3b !important;
+    border-bottom-color: #ff3b3b !important;
+}
+
+/* Risk badge helpers */
+.risk-high   { color: #ff3b3b; font-weight: 700; }
+.risk-medium { color: #f5a623; font-weight: 600; }
+.risk-low    { color: #27ae60; font-weight: 500; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #080c12; }
+::-webkit-scrollbar-thumb { background: #1e2a3a; border-radius: 3px; }

@@ -1,0 +1,26 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.env
+*.parquet
+*.pkl
+
+# Data (large — download via scripts)
+data/raw/
+data/processed/
+data/ground_truth/
+outputs/models/
+outputs/figures/*.png
+
+# Node
+web/node_modules/
+web/.next/
+web/.env.local
+
+# Misc
+.DS_Store
+.ipynb_checkpoints/
+*.tar
+*.zip

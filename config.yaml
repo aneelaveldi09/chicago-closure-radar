@@ -1,0 +1,51 @@
+project:
+  name: "Chicago Closure Radar"
+  city: "Chicago"
+  business_types:
+    - "Cafés / Coffee Shops"
+    - "Bookstores"
+    - "Restaurants (indie)"
+
+data:
+  chicago_portal:
+    business_licenses_url: "https://data.cityofchicago.org/resource/r5kz-chrr.json"
+    food_inspections_url: "https://data.cityofchicago.org/resource/4ijn-s7e5.json"
+    app_token: ""  # optional, raises rate limits — get free at data.cityofchicago.org
+
+  yelp:
+    dataset_path: "data/raw/yelp/"
+    business_file: "yelp_academic_dataset_business.json"
+    review_file: "yelp_academic_dataset_review.json"
+    checkin_file: "yelp_academic_dataset_checkin.json"
+
+  google_places:
+    api_key: ""  # set in .env as GOOGLE_PLACES_API_KEY
+    fields: ["business_status", "rating", "user_ratings_total", "opening_hours"]
+
+features:
+  review_velocity:
+    window_days: [30, 90, 180]         # rolling windows
+    baseline_window_days: 365          # what to compare against
+  sentiment:
+    model: "vader"                     # "vader" | "bert"
+    window_reviews: 20                 # last N reviews per window
+  rating_trajectory:
+    min_reviews: 5                     # min reviews to compute slope
+    window_months: [3, 6, 12]
+  owner_response:
+    response_lag_days_threshold: 7     # flag if avg response > 7 days
+
+model:
+  target: "closed_within_6_months"
+  test_size: 0.2
+  random_state: 42
+  cv_folds: 5
+  risk_score_buckets:
+    low: [0.0, 0.33]
+    medium: [0.33, 0.66]
+    high: [0.66, 1.0]
+
+output:
+  figures_dir: "outputs/figures"
+  reports_dir: "outputs/reports"
+  model_dir: "outputs/models"
