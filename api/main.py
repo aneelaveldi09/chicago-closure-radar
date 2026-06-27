@@ -1,6 +1,6 @@
 """
 Chicago Closure Radar — FastAPI Risk Score API
-Deploy on Railway. Provides a REST API for risk scores.
+Deploy on Render. Provides a REST API for risk scores.
 
 Endpoints:
   GET  /                        → health check

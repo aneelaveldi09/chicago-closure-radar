@@ -15,7 +15,7 @@
 
 ### ★ ★ ★ ★
 
-**A machine learning early-warning system that flags which Chicago cafés, bookstores, and restaurants are going to close — months before they do.**
+**A machine learning early-warning system that flags which Chicago cafés, bookstores, and restaurants are going to close. Months before they do.**
 
 *Built on real City of Chicago data. Every dot on this map is a place someone calls their regular.*
 
@@ -38,13 +38,13 @@
 
 ## The idea
 
-<img src="https://images.unsplash.com/photo-1696170089034-a4c5f6f98a4d?w=1200&q=80&fit=crop" width="100%" alt="Chicago street with storefronts" />
+<img src="https://images.unsplash.com/photo-1533105079780-92b9be482077?w=1200&q=80&fit=crop" width="100%" alt="Chicago street with storefronts" />
 
 <br />
 
 Chicago has a culture. Book Cellar in Lincoln Square. Metropolis Coffee in Edgewater. The corner tamale spot you've been going to since college. Every few months, one of them goes dark. A hand-lettered sign appears in the window. Instagram fills up with "I can't believe it's gone."
 
-The regulars usually knew something was off — the inspectors kept coming, violations kept piling up, the hours got inconsistent. But nobody was watching the signals together.
+The regulars usually knew something was off. The inspectors kept coming, violations kept piling up, the hours got inconsistent. But nobody was watching the signals together.
 
 **This project watches the signals.**
 
@@ -60,19 +60,19 @@ The result: businesses flagged HIGH risk close at a **46× higher rate** than th
 
 <img src="docs/images/closures_over_time.png" width="100%" alt="Chicago food business closures over time" />
 
-*Monthly count of businesses officially confirmed "Out of Business" by Chicago food inspectors, 2015–2025. The COVID-19 shock is visible but smaller than you'd expect — the closures were already happening.*
+*Monthly count of businesses officially confirmed "Out of Business" by Chicago food inspectors, 2015–2025. The COVID-19 shock is visible but smaller than you'd expect. The closures were already happening.*
 
 <br />
 
 <img src="docs/images/model_results.png" width="100%" alt="Model results: risk score distribution, closure rate by bucket, precision vs coverage" />
 
-*Left: risk score distributions for open vs. closed businesses separate cleanly. Center: businesses in the HIGH-risk bucket close at 46.4% — Medium at 9.5%, Low at 0.9%. Right: at the 66% threshold, every 3 flagged businesses, 1.4 actually close.*
+*Left: risk score distributions for open vs. closed businesses separate cleanly. Center: HIGH bucket closes at 46.4%, Medium at 9.5%, Low at 0.9%. Right: at the 66% threshold, every 3 flagged businesses, 1.4 actually close.*
 
 <br />
 
 <img src="docs/images/shap_importance.png" width="100%" alt="SHAP feature importance" />
 
-*The single strongest signal is how long it's been since the city last showed up to inspect. When inspectors stop visiting, something is usually wrong — either the city has given up or the owner has.*
+*The single strongest signal is how long it's been since the city last showed up to inspect. When inspectors stop visiting, something is usually wrong: either the city gave up or the owner did.*
 
 ---
 
@@ -87,7 +87,7 @@ The City of Chicago publishes two datasets that together form a surprisingly com
 | [Food Inspections](https://data.cityofchicago.org/Health-Human-Services/Food-Inspections/4ijn-s7e5) | 312,312 | `results = "Out of Business"` = confirmed closure |
 | [Business Licenses](https://data.cityofchicago.org/Community-Economic-Development/Business-Licenses/r5kz-chrr) | 193,474 | `license_status = AAC/REV` = cancelled mid-term |
 
-Both pull automatically with zero API key required. The ground truth is constructed by cross-referencing both sources — a business gets labeled CLOSED if either confirms it.
+Both pull automatically with zero API key required. The ground truth is constructed by cross-referencing both sources. A business gets labeled CLOSED if either confirms it.
 
 ### Features engineered
 
@@ -173,7 +173,7 @@ chicago-closure-radar/
 │       └── alerts.py               ← email alert engine
 │
 ├── api/
-│   └── main.py                     ← FastAPI (Railway-ready)
+│   └── main.py                     ← FastAPI (Render-ready)
 │
 ├── web/                            ← Next.js frontend (Vercel-ready)
 │   └── src/app/
@@ -290,9 +290,9 @@ For automated weekly runs, add to crontab:
 
 ## Deployment
 
-**FastAPI → Railway**
+**FastAPI → Render**
 
-Connect this repo in the Railway dashboard. The `railway.json` at the root configures everything automatically. Set `PREDICTIONS_PATH` as an environment variable if needed.
+Connect this repo in the Render dashboard. Set the start command to `uvicorn api.main:app --host 0.0.0.0 --port $PORT`. Set `PREDICTIONS_PATH` as an environment variable if needed.
 
 **Next.js → Vercel**
 
@@ -301,7 +301,7 @@ cd web
 npx vercel --prod
 ```
 
-Set `NEXT_PUBLIC_API_URL` to your Railway API URL in Vercel's environment settings.
+Set `NEXT_PUBLIC_API_URL` to your Render API URL in Vercel's environment settings.
 
 ---
 
@@ -337,7 +337,7 @@ Set `NEXT_PUBLIC_API_URL` to your Railway API URL in Vercel's environment settin
 <br /><br />
 
 *"The flag has four stars. Fort Dearborn. The Great Fire. The World's Fair. A Century of Progress.*
-*This project is for the fifth kind of Chicago story — the ones that quietly end."*
+*This project is for the fifth kind of Chicago story: the ones that quietly end."*
 
 <br />
 

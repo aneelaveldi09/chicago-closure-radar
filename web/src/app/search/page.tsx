@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { Search, ArrowLeft } from "lucide-react";
@@ -62,11 +63,19 @@ function ScoreGauge({ score }: { score: number }) {
 }
 
 export default function SearchPage() {
-  const [query, setQuery] = useState("");
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [results, setResults] = useState<Business[]>([]);
   const [loading, setLoading] = useState(false);
   const [selected, setSelected] = useState<Business | null>(null);
   const [searched, setSearched] = useState(false);
+
+  // Auto-run search when arriving from dashboard with ?q=
+  useEffect(() => {
+    const q = searchParams.get("q");
+    if (q) doSearch(q);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function doSearch(q: string) {
     if (!q.trim()) return;
@@ -234,7 +243,7 @@ export default function SearchPage() {
                       : "bg-green-500/8 border border-green-500/15 text-green-400"
                   }`}>
                     {selected.risk_bucket === "high" && "⚠ This business is in the top risk tier. Businesses at this level close at a 46% rate within 6 months."}
-                    {selected.risk_bucket === "medium" && "→ Elevated risk. Businesses in this bucket close at 9.5% — 10× the baseline rate."}
+                    {selected.risk_bucket === "medium" && "→ Elevated risk. Businesses in this bucket close at 9.5%, which is 10× the baseline rate."}
                     {selected.risk_bucket === "low" && "✓ Low risk. Less than 1% of businesses in this bucket close within 6 months."}
                   </div>
                 </div>

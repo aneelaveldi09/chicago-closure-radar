@@ -20,7 +20,7 @@ const STEPS = [
   {
     num: "01",
     title: "Collect the data",
-    body: "We pull two live datasets from the City of Chicago Data Portal: Business Licenses (193K+ records) and Food Inspections (312K+ records). Both are refreshed regularly via the Socrata API — no scraping, no static dumps.",
+    body: "We pull two live datasets from the City of Chicago Data Portal: Business Licenses (193K+ records) and Food Inspections (312K+ records). Both are refreshed regularly via the Socrata API. No scraping, no static dumps.",
   },
   {
     num: "02",
@@ -35,17 +35,17 @@ const STEPS = [
   {
     num: "04",
     title: "Train with XGBoost",
-    body: "We train an XGBoost classifier on snapshots — features computed as of date X, label = closed within 6 months after X. Class imbalance (97/3) is handled via scale_pos_weight. 5-fold cross-validation yields ROC-AUC 0.807.",
+    body: "We train an XGBoost classifier on snapshots: features computed as of date X, label = closed within 6 months after X. Class imbalance (97/3) is handled via scale_pos_weight. 5-fold cross-validation yields ROC-AUC 0.807.",
   },
   {
     num: "05",
     title: "Explain with SHAP",
-    body: "TreeExplainer decomposes each prediction into feature contributions. The single biggest signal: days since last inspection. A business that goes dark (no city inspection) for a long time is the strongest predictor of closure — above violation counts, fail rates, or trends.",
+    body: "TreeExplainer decomposes each prediction into feature contributions. The single biggest signal: days since last inspection. A business that goes dark with no city inspection for a long time is the strongest predictor of closure, ranking above violation counts, fail rates, and trends.",
   },
   {
     num: "06",
     title: "Validate the lift",
-    body: "We bucket predictions into HIGH / MEDIUM / LOW and measure actual closure rates. The HIGH bucket closes at 46.4% — 46× the 1% baseline. MEDIUM closes at 9.5%, still 10× baseline. This lift is the proof: the model is learning real signal, not noise.",
+    body: "We bucket predictions into HIGH / MEDIUM / LOW and measure actual closure rates. The HIGH bucket closes at 46.4% (46× the 1% baseline). MEDIUM closes at 9.5%, still 10× baseline. This lift is the proof: the model is learning real signal, not noise.",
   },
 ];
 
@@ -100,7 +100,7 @@ export default function AboutPage() {
             <span className="text-red-500">the lights go out</span>
           </h1>
           <p className="text-white/50 text-lg leading-relaxed max-w-2xl mb-8">
-            A machine learning system that reads city inspection records like a doctor reads vital signs —
+            A machine learning system that reads city inspection records like a doctor reads vital signs,
             catching the slow deterioration that precedes a café closure months before it happens.
             Built entirely on open government data.
           </p>
@@ -123,7 +123,7 @@ export default function AboutPage() {
       {/* How it works — steps */}
       <div className="max-w-4xl mx-auto px-8 py-16">
         <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/20 border-b border-white/5 pb-2 mb-10">
-          ✶ Methodology — Step by Step
+          ✶ Methodology: Step by Step
         </div>
         <div className="space-y-0">
           {STEPS.map((s, i) => (
@@ -161,7 +161,7 @@ export default function AboutPage() {
           </div>
           <p className="text-white/35 text-sm leading-relaxed max-w-2xl">
             The model achieves 0.807 ROC-AUC with 5-fold cross-validation. The HIGH-risk bucket
-            concentrates real closures at 46× the background rate — meaning if you only acted on
+            concentrates real closures at 46× the background rate. If you only acted on
             the flagged set, you would catch 46× more closures per inspection than random sampling.
           </p>
         </div>
@@ -195,7 +195,7 @@ export default function AboutPage() {
       <div className="border-t border-white/5 bg-white/[0.01]">
         <div className="max-w-4xl mx-auto px-8 py-16">
           <div className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-white/20 border-b border-white/5 pb-2 mb-8">
-            ✶ Data Sources — 100% Open
+            ✶ Data Sources: 100% Open
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {[

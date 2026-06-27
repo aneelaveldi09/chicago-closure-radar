@@ -55,16 +55,20 @@ function RiskBadge({ bucket }: { bucket: string }) {
 function BusinessCard({ b }: { b: Business }) {
   const borderColor = b.risk_bucket === "high" ? "border-l-red-500" : b.risk_bucket === "medium" ? "border-l-yellow-500" : "border-l-green-600";
   return (
-    <div className={`bg-white/[0.03] border border-white/8 border-l-2 ${borderColor} rounded-md p-3 hover:bg-white/[0.05] transition-colors`}>
+    <Link
+      href={`/search?q=${encodeURIComponent(b.dba_name ?? "")}`}
+      className={`block bg-white/[0.03] border border-white/8 border-l-2 ${borderColor} rounded-md p-3 hover:bg-white/[0.06] hover:border-white/15 transition-colors cursor-pointer group`}
+    >
       <div className="flex items-start justify-between gap-2 mb-1.5">
-        <p className="font-semibold text-white text-sm leading-tight truncate max-w-[200px]">
-          {b.dba_name ?? "—"}
+        <p className="font-semibold text-white text-sm leading-tight truncate max-w-[200px] group-hover:text-white/90">
+          {b.dba_name ?? "unnamed"}
         </p>
         <div className="flex items-center gap-2 shrink-0">
           <span className={`font-mono text-sm font-bold ${b.risk_bucket === "high" ? "text-red-400" : b.risk_bucket === "medium" ? "text-yellow-400" : "text-green-400"}`}>
             {(b.risk_score * 100).toFixed(0)}%
           </span>
           <RiskBadge bucket={b.risk_bucket} />
+          <ArrowUpRight size={11} className="text-white/20 group-hover:text-white/50 transition-colors" />
         </div>
       </div>
       <RiskBar score={b.risk_score} />
@@ -80,7 +84,7 @@ function BusinessCard({ b }: { b: Business }) {
         )}
         {b.address && <span className="truncate max-w-[140px]">{b.address}</span>}
       </div>
-    </div>
+    </Link>
   );
 }
 
