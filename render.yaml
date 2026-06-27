@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: chicago-closure-radar-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-api.txt
+    startCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PREDICTIONS_PATH
+        value: outputs/predictions.parquet
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+    healthCheckPath: /
