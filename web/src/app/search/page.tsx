@@ -291,7 +291,7 @@ function SearchPageInner() {
                 name: b.dba_name,
                 score: b.risk_score,
                 bucket: b.risk_bucket,
-                address: b.address,
+                address: b.address ?? undefined,
               }))}
           />
         </div>

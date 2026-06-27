@@ -47,7 +47,7 @@ export default function Home() {
       <div className="absolute inset-0 z-10 bg-gradient-to-r from-black/60 via-transparent to-black/60 pointer-events-none" />
 
       {/* ── Nav ── */}
-      <nav className="absolute top-0 left-0 right-0 z-30 flex items-center justify-between px-8 h-14 border-b border-white/5 backdrop-blur-sm">
+      <nav className="absolute top-0 left-0 right-0 z-50 flex items-center justify-between px-8 h-14 border-b border-white/5 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.8)] animate-pulse" />
           <span className="font-mono text-sm font-bold text-white tracking-widest">CHICAGO CLOSURE RADAR</span>
@@ -92,8 +92,8 @@ export default function Home() {
 
               <p className="text-white/50 text-lg leading-relaxed max-w-md mb-4">
                 We track 19,000+ food businesses across Chicago using city
-                inspection records, violation trends, and failure streaks —
-                flagging closures months before they happen.
+                inspection records, violation trends, and failure streaks.
+                Flagging closures months before they happen.
               </p>
 
               {/* Chicago neighborhood tags */}
