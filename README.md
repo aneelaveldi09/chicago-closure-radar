@@ -30,7 +30,7 @@
 
 <br />
 
-**[Live Demo](https://chicago-closure-radar.vercel.app)** · **[API](https://chicago-closure-radar-api.railway.app/docs)** · **Built by [Aneela Veldi](https://github.com/aneelaveldi09)**
+**[Live Demo](https://chicago-closure-radar.vercel.app)** · **[API](https://chicago-closure-radar-api.onrender.com/docs)** · **Built by [Aneela Veldi](https://github.com/aneelaveldi09)**
 
 </div>
 
@@ -345,7 +345,7 @@ Set `NEXT_PUBLIC_API_URL` to your Railway API URL in Vercel's environment settin
 
 <br />
 
-**[Live Demo](https://chicago-closure-radar.vercel.app)** · **[API Docs](https://chicago-closure-radar-api.railway.app/docs)**
+**[Live Demo](https://chicago-closure-radar.vercel.app)** · **[API Docs](https://chicago-closure-radar-api.onrender.com/docs)**
 
 <br />
 
