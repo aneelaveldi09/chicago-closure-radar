@@ -19,15 +19,21 @@ interface Business {
   dba_name: string;
   risk_score: number;
   risk_bucket: string;
-  days_since_last_inspection?: number;
-  all_time_fail_rate?: number;
-  all_time_violations_per_insp?: number;
-  consecutive_fails?: number;
-  result_trend?: number;
-  address?: string;
-  zip_code?: string;
-  latitude?: number;
-  longitude?: number;
+  days_since_last_inspection?: number | null;
+  all_time_fail_rate?: number | null;
+  all_time_violations_per_insp?: number | null;
+  all_time_critical_per_insp?: number | null;
+  consecutive_fails?: number | null;
+  result_trend?: number | null;
+  total_inspections?: number | null;
+  fail_rate_180d?: number | null;
+  violations_per_insp_180d?: number | null;
+  n_inspections_365d?: number | null;
+  fail_rate_365d?: number | null;
+  address?: string | null;
+  zip_code?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
 }
 
 function ScoreGauge({ score }: { score: number }) {
@@ -91,14 +97,23 @@ function SearchPageInner() {
     finally { setLoading(false); }
   }
 
+  const fmt = (v: number | null | undefined, fn: (n: number) => string, fallback = "n/a") =>
+    v != null ? fn(v) : fallback;
+
   const indicators = selected ? [
-    { label: "Days since last inspection", value: selected.days_since_last_inspection != null ? `${selected.days_since_last_inspection} days` : "—" },
-    { label: "All-time fail rate",         value: selected.all_time_fail_rate != null ? `${(selected.all_time_fail_rate*100).toFixed(0)}%` : "—" },
-    { label: "Violations per inspection",  value: selected.all_time_violations_per_insp != null ? selected.all_time_violations_per_insp.toFixed(1) : "—" },
-    { label: "Consecutive fails",          value: selected.consecutive_fails != null ? String(Math.round(selected.consecutive_fails)) : "0" },
-    { label: "Result trend",               value: selected.result_trend != null ? (selected.result_trend < -0.00001 ? "↓ declining" : "→ stable") : "—" },
-    { label: "Address",                    value: selected.address ?? "—" },
-    { label: "ZIP",                        value: selected.zip_code ?? "—" },
+    { label: "Days since last inspection", value: fmt(selected.days_since_last_inspection, n => `${Math.round(n)} days`) },
+    { label: "Total inspections",          value: fmt(selected.total_inspections, n => String(Math.round(n))) },
+    { label: "All-time fail rate",         value: fmt(selected.all_time_fail_rate, n => `${(n*100).toFixed(1)}%`) },
+    { label: "Violations / inspection",    value: fmt(selected.all_time_violations_per_insp, n => n.toFixed(2)) },
+    { label: "Critical violations / insp", value: fmt(selected.all_time_critical_per_insp, n => n.toFixed(2)) },
+    { label: "Consecutive fails",          value: fmt(selected.consecutive_fails, n => String(Math.round(n))) },
+    { label: "Result trend",               value: selected.result_trend != null ? (selected.result_trend < -0.00001 ? "↓ declining" : "→ stable") : "n/a" },
+    { label: "Fail rate (180 days)",       value: fmt(selected.fail_rate_180d, n => `${(n*100).toFixed(1)}%`) },
+    { label: "Violations / insp (180d)",   value: fmt(selected.violations_per_insp_180d, n => n.toFixed(2)) },
+    { label: "Inspections (past year)",    value: fmt(selected.n_inspections_365d, n => String(Math.round(n))) },
+    { label: "Fail rate (past year)",      value: fmt(selected.fail_rate_365d, n => `${(n*100).toFixed(1)}%`) },
+    { label: "Address",                    value: selected.address ?? "n/a" },
+    { label: "ZIP",                        value: selected.zip_code ?? "n/a" },
   ] : [];
 
   return (

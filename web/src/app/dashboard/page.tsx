@@ -13,11 +13,13 @@ interface Business {
   dba_name: string;
   risk_score: number;
   risk_bucket: string;
-  days_since_last_inspection?: number;
-  all_time_fail_rate?: number;
-  all_time_violations_per_insp?: number;
-  address?: string;
-  zip_code?: string;
+  days_since_last_inspection?: number | null;
+  all_time_fail_rate?: number | null;
+  all_time_violations_per_insp?: number | null;
+  consecutive_fails?: number | null;
+  total_inspections?: number | null;
+  address?: string | null;
+  zip_code?: string | null;
 }
 
 interface Stats {

@@ -3,19 +3,19 @@ Chicago Closure Radar — FastAPI Risk Score API
 Deploy on Render. Provides a REST API for risk scores.
 
 Endpoints:
-  GET  /                        → health check
-  GET  /businesses              → paginated list with risk scores
-  GET  /businesses/{id}         → single business detail
-  POST /search                  → search by name
-  GET  /top-risk?n=20           → top N highest-risk businesses
-  GET  /stats                   → city-wide summary stats
+  GET  /                        -> health check
+  GET  /businesses              -> paginated list with risk scores
+  GET  /businesses/{id}         -> single business detail
+  POST /search                  -> search by name
+  GET  /top-risk?n=20           -> top N highest-risk businesses
+  GET  /stats                   -> city-wide summary stats
 """
 
+import math
 import os
-import pickle
 import warnings
 from pathlib import Path
-from typing import Optional
+from typing import Any, Optional
 
 import pandas as pd
 from fastapi import FastAPI, HTTPException, Query
@@ -42,6 +42,25 @@ app.add_middleware(
 PRED_PATH = Path(os.getenv("PREDICTIONS_PATH", "outputs/predictions.parquet"))
 _cache: dict = {}
 
+# Columns served on every list/search/top-risk response
+DETAIL_COLS = [
+    "days_since_last_inspection",
+    "all_time_fail_rate",
+    "all_time_violations_per_insp",
+    "all_time_critical_per_insp",
+    "consecutive_fails",
+    "result_trend",
+    "total_inspections",
+    "fail_rate_180d",
+    "violations_per_insp_180d",
+    "n_inspections_365d",
+    "fail_rate_365d",
+    "address",
+    "zip_code",
+    "latitude",
+    "longitude",
+]
+
 
 def get_predictions() -> pd.DataFrame:
     if "df" not in _cache:
@@ -56,11 +75,29 @@ def get_predictions() -> pd.DataFrame:
     return _cache["df"]
 
 
+def to_records(df: pd.DataFrame) -> list[dict[str, Any]]:
+    """Convert DataFrame to JSON-safe records, replacing NaN with None."""
+    records = []
+    for row in df.to_dict("records"):
+        clean: dict[str, Any] = {}
+        for k, v in row.items():
+            if isinstance(v, float) and math.isnan(v):
+                clean[k] = None
+            elif hasattr(v, "item"):  # numpy scalar
+                clean[k] = v.item()
+            elif isinstance(v, pd.Timestamp):
+                clean[k] = str(v.date()) if not pd.isnull(v) else None
+            else:
+                clean[k] = v
+        records.append(clean)
+    return records
+
+
 # ── Response models ───────────────────────────────────────────────────────────
 
 class BusinessRisk(BaseModel):
     business_id: str
-    name: Optional[str]
+    dba_name: Optional[str]
     risk_score: float
     risk_bucket: str
     days_since_last_inspection: Optional[float]
@@ -68,6 +105,7 @@ class BusinessRisk(BaseModel):
     all_time_violations_per_insp: Optional[float]
     consecutive_fails: Optional[float]
     result_trend: Optional[float]
+    total_inspections: Optional[float]
     address: Optional[str]
     zip_code: Optional[str]
     latitude: Optional[float]
@@ -123,9 +161,8 @@ def list_businesses(
 
     if risk_bucket:
         df = df[df["risk_bucket"] == risk_bucket.lower()]
-    if zip_code:
-        if "zip_code" in df.columns:
-            df = df[df["zip_code"].astype(str).str.startswith(zip_code)]
+    if zip_code and "zip_code" in df.columns:
+        df = df[df["zip_code"].astype(str).str.startswith(zip_code)]
 
     ascending = order == "asc"
     sort_col = "dba_name" if sort_by == "name" else "risk_score"
@@ -137,15 +174,13 @@ def list_businesses(
     page_df = df.iloc[start:start + page_size]
 
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
-    opt  = ["days_since_last_inspection", "all_time_fail_rate",
-            "all_time_violations_per_insp", "address", "zip_code", "latitude", "longitude"]
-    cols += [c for c in opt if c in df.columns]
+    cols += [c for c in DETAIL_COLS if c in df.columns]
 
     return {
         "total": total,
         "page": page,
         "page_size": page_size,
-        "results": page_df[cols].fillna("").to_dict("records"),
+        "results": to_records(page_df[cols]),
     }
 
 
@@ -156,10 +191,8 @@ def get_business(business_id: str):
     if len(row) == 0:
         raise HTTPException(404, detail=f"Business {business_id!r} not found")
 
-    r = row.iloc[0]
-    detail_cols = [c for c in df.columns
-                   if c not in ["index"] and not c.startswith(":")]
-    return r[detail_cols].fillna("").to_dict()
+    detail_cols = [c for c in df.columns if c not in ["index"] and not c.startswith(":")]
+    return to_records(row[detail_cols])[0]
 
 
 @app.post("/search", tags=["Businesses"])
@@ -172,9 +205,8 @@ def search_businesses(body: SearchRequest):
     results = df[mask].nlargest(body.limit, "risk_score")
 
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
-    opt  = ["days_since_last_inspection", "all_time_fail_rate", "address", "zip_code", "latitude", "longitude"]
-    cols += [c for c in opt if c in df.columns]
-    return results[cols].fillna("").to_dict("records")
+    cols += [c for c in DETAIL_COLS if c in df.columns]
+    return to_records(results[cols])
 
 
 @app.get("/top-risk", tags=["Analytics"])
@@ -182,10 +214,8 @@ def top_risk(n: int = Query(20, ge=1, le=100)):
     df = get_predictions()
     top = df.nlargest(n, "risk_score")
     cols = ["business_id", "dba_name", "risk_score", "risk_bucket"]
-    opt  = ["days_since_last_inspection", "all_time_fail_rate",
-            "all_time_violations_per_insp", "address", "zip_code", "latitude", "longitude"]
-    cols += [c for c in opt if c in df.columns]
-    return top[cols].fillna("").to_dict("records")
+    cols += [c for c in DETAIL_COLS if c in df.columns]
+    return to_records(top[cols])
 
 
 if __name__ == "__main__":
